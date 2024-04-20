@@ -1,8 +1,7 @@
 #include "XClk.h"
 #include "driver/ledc.h"
 
-bool ClockEnable(int pin, int Hz)
-{
+bool ClockEnable(int pin, int Hz) {
     periph_module_enable(PERIPH_LEDC_MODULE);
 
     ledc_timer_config_t timer_conf;
@@ -23,7 +22,7 @@ bool ClockEnable(int pin, int Hz)
     ch_conf.speed_mode = LEDC_HIGH_SPEED_MODE;
     ch_conf.gpio_num = pin;
     
-    ch_conf.hpoint = 0;//added by me
+    ch_conf.hpoint = 0;
     
     err = ledc_channel_config(&ch_conf);
     if (err != ESP_OK) {
@@ -32,8 +31,6 @@ bool ClockEnable(int pin, int Hz)
     return true;
 }
 
-void ClockDisable()
-{
+void ClockDisable() {
     periph_module_disable(PERIPH_LEDC_MODULE);
 }
-
