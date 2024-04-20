@@ -18,23 +18,39 @@ void setupRouting() {
     server.on("/service", [](AsyncWebServerRequest* request) {
         digitalWrite(LED_PIN, HIGH);
         // The service endpoint response is a constant for the service, since it doesn't changes within time while the device is working
-        request->send(200, "application/json", "{\"service\":\"camera\",\"name\":\"Door\",\"id\":\"apartments-door-1\",\"sensors\":[\"capture\"]}");
+        request->send(200, "application/json", "{\"service\":\"camera\",\"name\":\"Door\",\"id\":\"apartments-door-1\",\"sensors\":[\"picture\"]}");
         digitalWrite(LED_PIN, LOW);
     });
 
     server.on("/settings", HTTP_POST, [](AsyncWebServerRequest* request) {
         digitalWrite(LED_PIN, HIGH);
+        preferences_t* preferences = getPreferences();
+        size_t params = request->params();
+        for (int i = 0; i < params; i++) {
+            AsyncWebParameter* param = request->getParam(i);
+            if (param->name() == "enable_display") {
+                preferences->enable_display = param->value().toInt();
+            } else if (param->name() == "display_refresh_period") {
+                preferences->display_refresh_period = param->value().toInt();
+            }
+        }
         request->send(200);
-        ESP_LOGI("preferences_save", "none");
+        saveSettings(preferences);
+        ESP_LOGI("preferences_save", "ED: %d DR: %d", preferences->enable_display, preferences->display_refresh_period);
+        request->send(200);
         digitalWrite(LED_PIN, LOW);
     });
 
     server.on("/settings", [](AsyncWebServerRequest* request) {
         digitalWrite(LED_PIN, HIGH);
+        preferences_t* preferences = getPreferences();
         char buffer[512] = {0};
-        snprintf(buffer, 512, "{}");
+        snprintf(buffer, 512,
+            "{\"enable_display\":%d,\"display_refresh_period\":%d}",
+            preferences->enable_display, preferences->display_refresh_period);
         request->send(200, "application/json", buffer);
-        ESP_LOGI("preferences_get", "none");
+        ESP_LOGI("preferences_get", "ED: %d DR: %d",
+            preferences->enable_display, preferences->display_refresh_period);
         digitalWrite(LED_PIN, LOW);
     });
 

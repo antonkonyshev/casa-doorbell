@@ -9,6 +9,7 @@ bool ClockEnable(int pin, int Hz) {
     timer_conf.freq_hz = Hz;
     timer_conf.speed_mode = LEDC_HIGH_SPEED_MODE;
     timer_conf.timer_num = LEDC_TIMER_0;
+    timer_conf.clk_cfg = LEDC_AUTO_CLK;
     esp_err_t err = ledc_timer_config(&timer_conf);
     if (err != ESP_OK) {
         return false;
