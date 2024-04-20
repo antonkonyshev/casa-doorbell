@@ -6,7 +6,6 @@
 #include "pinout.h"
 #include "preferences.h"
 #include "camera.h"
-#include "esp_camera.h"
 
 #define API_PORT 80
 

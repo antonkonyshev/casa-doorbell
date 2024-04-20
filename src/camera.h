@@ -3,5 +3,9 @@
 #include "pinout.h"
 
 bool setupCamera();
-OV7670* getCamera();
-unsigned char* getBmpHeader();
+uint8_t* getFrame();
+uint8_t* getBmpHeader();
+size_t getFrameSize();
+size_t getBmpHeaderSize();
+int getCameraXRes();
+int getCameraYRes();

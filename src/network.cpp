@@ -7,14 +7,10 @@ bool wifiApMode = false;
 void setupRouting() {
     server.on("/", [](AsyncWebServerRequest* request) {
         digitalWrite(LED_PIN, HIGH);
-        OV7670* camera = getCamera();
-        camera->oneFrame();
-        uint8_t* bmpHeader = getBmpHeader();
-        uint8_t* frame = camera->frame;
         AsyncResponseStream* response = request->beginResponseStream("image/bmp");
         response->setCode(200);
-        response->write((const uint8_t*) bmpHeader, BMP::headerSize);
-        response->write((const uint8_t*) camera->frame, camera->xres * camera->yres * 2);
+        response->write(getBmpHeader(), getBmpHeaderSize());
+        response->write(getFrame(), getFrameSize());
         request->send(response);
         digitalWrite(LED_PIN, LOW);
     });
@@ -22,7 +18,7 @@ void setupRouting() {
     server.on("/service", [](AsyncWebServerRequest* request) {
         digitalWrite(LED_PIN, HIGH);
         // The service endpoint response is a constant for the service, since it doesn't changes within time while the device is working
-        request->send(200, "application/json", "{\"service\":\"camera\",\"name\":\"Door\",\"id\":\"apartments-door-1\",\"sensors\":[\"camera\"]}");
+        request->send(200, "application/json", "{\"service\":\"camera\",\"name\":\"Door\",\"id\":\"apartments-door-1\",\"sensors\":[\"capture\"]}");
         digitalWrite(LED_PIN, LOW);
     });
 

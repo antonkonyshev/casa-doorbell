@@ -10,9 +10,8 @@ void setup() {
     digitalWrite(LED_PIN, HIGH);
     btStop();
     setupCamera();
-    // setupDisplay();
+    setupDisplay();
     setupWifi();
-    // setupWebServer();
     setupRouting();
 
     Serial.println("");
@@ -25,10 +24,9 @@ void setup() {
 }
 
 void loop() {
-    // digitalWrite(LED_PIN, HIGH);
-    // wifiKeepAlive();
-    // digitalWrite(LED_PIN, LOW);
-    // OV7670* camera = getCamera();
-    // camera->oneFrame();
-    // displayRGB565(camera->frame, camera->xres, camera->yres);
+    digitalWrite(LED_PIN, HIGH);
+    displayRGB565(getFrame(), getCameraXRes(), getCameraYRes());
+    delay(1000);
+    wifiKeepAlive();
+    digitalWrite(LED_PIN, LOW);
 }
