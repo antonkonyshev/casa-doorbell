@@ -19,3 +19,4 @@
 #define BACKGROUND_COLOR COLOR_BLACK
 
 bool setupDisplay();
+void displayRGB565(unsigned char*, int, int);

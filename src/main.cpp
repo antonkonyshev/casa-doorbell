@@ -9,9 +9,11 @@ void setup() {
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
     btStop();
-    setupDisplay();
+    // setupCamera();
+    // setupDisplay();
     setupWifi();
-    setupRouting();
+    setupWebServer();
+    // setupRouting();
 
     Serial.println("");
     Serial.printf("Total  heap: %8d bytes     |     Free  heap: %8d bytes\n", ESP.getHeapSize(), ESP.getFreeHeap());
@@ -26,4 +28,7 @@ void loop() {
     // digitalWrite(LED_PIN, HIGH);
     // wifiKeepAlive();
     // digitalWrite(LED_PIN, LOW);
+    // OV7670* camera = getCamera();
+    // camera->oneFrame();
+    // displayRGB565(camera->frame, camera->xres, camera->yres);
 }

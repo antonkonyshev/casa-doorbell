@@ -4,5 +4,8 @@
 #include <time.h>
 
 #include "pinout.h"
+// #include "camera.h"
 #include "display.h"
 #include "network.h"
+// #include "esp_camera.h"
+#include "AsyncWebCamera.h"
