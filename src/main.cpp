@@ -9,11 +9,11 @@ void setup() {
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
     btStop();
-    // setupCamera();
+    setupCamera();
     // setupDisplay();
     setupWifi();
-    setupWebServer();
-    // setupRouting();
+    // setupWebServer();
+    setupRouting();
 
     Serial.println("");
     Serial.printf("Total  heap: %8d bytes     |     Free  heap: %8d bytes\n", ESP.getHeapSize(), ESP.getFreeHeap());

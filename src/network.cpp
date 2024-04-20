@@ -1,37 +1,49 @@
 #include "network.h"
 
 WiFiMulti wifiMulti;
-// AsyncWebServer server(API_PORT);
+AsyncWebServer server(API_PORT);
 bool wifiApMode = false;
 
-// void setupRouting() {
-//     server.on("/", sendJpg);
+void setupRouting() {
+    server.on("/", [](AsyncWebServerRequest* request) {
+        digitalWrite(LED_PIN, HIGH);
+        OV7670* camera = getCamera();
+        camera->oneFrame();
+        uint8_t* bmpHeader = getBmpHeader();
+        uint8_t* frame = camera->frame;
+        AsyncResponseStream* response = request->beginResponseStream("image/bmp");
+        response->setCode(200);
+        response->write((const uint8_t*) bmpHeader, BMP::headerSize);
+        response->write((const uint8_t*) camera->frame, camera->xres * camera->yres * 2);
+        request->send(response);
+        digitalWrite(LED_PIN, LOW);
+    });
 
-//     server.on("/service", [](AsyncWebServerRequest* request) {
-//         digitalWrite(LED_PIN, HIGH);
-//         // The service endpoint response is a constant for the service, since it doesn't changes within time while the device is working
-//         request->send(200, "application/json", "{\"service\":\"camera\",\"name\":\"Door\",\"id\":\"apartments-door-1\",\"sensors\":[\"camera\"]}");
-//         digitalWrite(LED_PIN, LOW);
-//     });
+    server.on("/service", [](AsyncWebServerRequest* request) {
+        digitalWrite(LED_PIN, HIGH);
+        // The service endpoint response is a constant for the service, since it doesn't changes within time while the device is working
+        request->send(200, "application/json", "{\"service\":\"camera\",\"name\":\"Door\",\"id\":\"apartments-door-1\",\"sensors\":[\"camera\"]}");
+        digitalWrite(LED_PIN, LOW);
+    });
 
-//     server.on("/settings", HTTP_POST, [](AsyncWebServerRequest* request) {
-//         digitalWrite(LED_PIN, HIGH);
-//         request->send(200);
-//         ESP_LOGI("preferences_save", "none");
-//         digitalWrite(LED_PIN, LOW);
-//     });
+    server.on("/settings", HTTP_POST, [](AsyncWebServerRequest* request) {
+        digitalWrite(LED_PIN, HIGH);
+        request->send(200);
+        ESP_LOGI("preferences_save", "none");
+        digitalWrite(LED_PIN, LOW);
+    });
 
-//     server.on("/settings", [](AsyncWebServerRequest* request) {
-//         digitalWrite(LED_PIN, HIGH);
-//         char buffer[512] = {0};
-//         snprintf(buffer, 512, "{}");
-//         request->send(200, "application/json", buffer);
-//         ESP_LOGI("preferences_get", "none");
-//         digitalWrite(LED_PIN, LOW);
-//     });
+    server.on("/settings", [](AsyncWebServerRequest* request) {
+        digitalWrite(LED_PIN, HIGH);
+        char buffer[512] = {0};
+        snprintf(buffer, 512, "{}");
+        request->send(200, "application/json", buffer);
+        ESP_LOGI("preferences_get", "none");
+        digitalWrite(LED_PIN, LOW);
+    });
 
-//     server.begin();
-// }
+    server.begin();
+}
 
 void indicateSOS() {
     delay(1000);
