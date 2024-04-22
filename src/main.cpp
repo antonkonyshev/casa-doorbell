@@ -2,6 +2,7 @@
 
 hw_timer_t* display_timer = NULL;
 bool perform_display_refresh = false;
+bool is_presence_detection_enabled = false;
 
 void performDisplayRefresh() {
     perform_display_refresh = true;
@@ -24,16 +25,20 @@ void setup() {
     digitalWrite(LED_PIN, HIGH);
     btStop();
     setupPreferences();
+    preferences_t* preferences = getPreferences();
     setupCamera();
-    if (getPreferences()->enable_display > 0) {
+    if (preferences->enable_display > 0) {
         setupDisplay();
     }
     setupWifi();
     setupRouting();
-    if (getPreferences()->enable_display > 0) {
+    if (preferences->enable_display > 0) {
         setupTimers();
     }
-    setupSensors();
+    is_presence_detection_enabled = bool(preferences->enable_presence_detection > 0);
+    if (is_presence_detection_enabled > 0) {
+        setupSensors();
+    }
 
     Serial.println("");
     Serial.printf("Total  heap: %8d bytes     |     Free  heap: %8d bytes\n", ESP.getHeapSize(), ESP.getFreeHeap());
@@ -52,5 +57,7 @@ void loop() {
         wifiKeepAlive();
         digitalWrite(LED_PIN, LOW);
     }
-    sensorsLoop();
+    if (is_presence_detection_enabled) {
+        sensorsLoop();
+    }
 }

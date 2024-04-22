@@ -73,14 +73,12 @@ void setupPreferences() {
     preferences = new preferences_t;
     nvs_handle_t storage;
     nvs_open(NVS_PREFERENCES_STORAGE_NAME, NVS_READWRITE, &storage);
+    preferences->enable_display = NVS_ENABLE_DISPLAY_DEFAULT;
     nvs_get_i8(storage, NVS_ENABLE_DISPLAY, &(preferences->enable_display));
-    if (preferences->enable_display && preferences->enable_display > 0) {
-        preferences->enable_display = NVS_ENABLE_DISPLAY_DEFAULT;
-    }
+    preferences->display_refresh_period = NVS_DISPLAY_REFRESH_PERIOD_DEFAULT;
     nvs_get_u16(storage, NVS_DISPLAY_REFRESH_PERIOD, &(preferences->display_refresh_period));
-    if (!preferences->display_refresh_period) {
-        preferences->display_refresh_period = NVS_DISPLAY_REFRESH_PERIOD_DEFAULT;
-    }
+    preferences->enable_presence_detection = NVS_ENABLE_PRESENCE_DETECTION_DEFAULT;
+    nvs_get_i8(storage, NVS_ENABLE_PRESENCE_DETECTION, &(preferences->enable_presence_detection));
     nvs_close(storage);
 }
 
@@ -98,6 +96,9 @@ void saveSettings(preferences_t* prefs) {
     }
     if (prefs->display_refresh_period) {
         nvs_set_u16(storage, NVS_DISPLAY_REFRESH_PERIOD, prefs->display_refresh_period);
+    }
+    if (prefs->enable_presence_detection || prefs->enable_presence_detection == 0) {
+        nvs_set_i8(storage, NVS_ENABLE_PRESENCE_DETECTION, prefs->enable_presence_detection);
     }
     nvs_close(storage);
 }

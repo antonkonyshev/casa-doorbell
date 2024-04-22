@@ -10,6 +10,8 @@
 #define NVS_ENABLE_DISPLAY_DEFAULT 0
 #define NVS_DISPLAY_REFRESH_PERIOD "display_refresh_period"
 #define NVS_DISPLAY_REFRESH_PERIOD_DEFAULT 3
+#define NVS_ENABLE_PRESENCE_DETECTION "enable_presence_detection"
+#define NVS_ENABLE_PRESENCE_DETECTION_DEFAULT 0
 
 typedef struct wifi_credentials_s {
     std::string ssid;
@@ -22,6 +24,8 @@ typedef struct wifi_credentials_s {
 typedef struct preferences_s {
     int8_t enable_display;
     uint16_t display_refresh_period;
+    int8_t enable_presence_detection;
+
     std::string wifi_ssid;
     std::string wifi_password;
 
