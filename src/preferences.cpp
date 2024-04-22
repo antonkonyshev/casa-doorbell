@@ -79,6 +79,8 @@ void setupPreferences() {
     nvs_get_u16(storage, NVS_DISPLAY_REFRESH_PERIOD, &(preferences->display_refresh_period));
     preferences->enable_presence_detection = NVS_ENABLE_PRESENCE_DETECTION_DEFAULT;
     nvs_get_i8(storage, NVS_ENABLE_PRESENCE_DETECTION, &(preferences->enable_presence_detection));
+    preferences->journal_length = NVS_JOURNAL_LENGTH_DEFAULT;
+    nvs_get_u16(storage, NVS_JOURNAL_LENGTH, &(preferences->journal_length));
     nvs_close(storage);
 }
 
@@ -99,6 +101,9 @@ void saveSettings(preferences_t* prefs) {
     }
     if (prefs->enable_presence_detection || prefs->enable_presence_detection == 0) {
         nvs_set_i8(storage, NVS_ENABLE_PRESENCE_DETECTION, prefs->enable_presence_detection);
+    }
+    if (prefs->journal_length || prefs->journal_length == 0) {
+        nvs_set_u16(storage, NVS_JOURNAL_LENGTH, prefs->journal_length);
     }
     nvs_close(storage);
 }
