@@ -3,6 +3,7 @@
 #include <Arduino.h>
 
 #include "pinout.h"
+#include "journal.h"
 
 #define MOTION_LED_INDICATION_PERIOD 5000  // Period of led indication after motion detection (in milliseconds)
 

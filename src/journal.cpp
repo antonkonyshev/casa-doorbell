@@ -2,12 +2,15 @@
 
 record_t* journal;
 
-void saveRecord(std::string message, uint8_t priority) {
+void saveJournalRecord(std::string message, uint8_t priority) {
     preferences_t* preferences = getPreferences();
     if (!preferences->journal_length) {
         return;
     }
     record_t* record = new record_t;
+    record->timestamp = millis();
+    record->message = message;
+    record->priority = priority;
     record->next = journal;
     journal = record;
     uint16_t size = 1;

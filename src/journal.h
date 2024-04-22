@@ -14,6 +14,6 @@ typedef struct record_s {
         priority(1), next(NULL) {}
 } record_t;
 
-void saveRecord(std::string message, uint8_t priority);
+void saveJournalRecord(std::string message, uint8_t priority);
 record_t* getJournal();
 void cleanJournal();
