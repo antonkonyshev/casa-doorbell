@@ -33,6 +33,7 @@ void setup() {
     if (getPreferences()->enable_display > 0) {
         setupTimers();
     }
+    setupSensors();
 
     Serial.println("");
     Serial.printf("Total  heap: %8d bytes     |     Free  heap: %8d bytes\n", ESP.getHeapSize(), ESP.getFreeHeap());
@@ -51,4 +52,5 @@ void loop() {
         wifiKeepAlive();
         digitalWrite(LED_PIN, LOW);
     }
+    sensorsLoop();
 }

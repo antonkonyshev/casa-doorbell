@@ -4,6 +4,7 @@
 #include <time.h>
 
 #include "pinout.h"
+#include "sensors.h"
 #include "camera.h"
 #include "display.h"
 #include "network.h"

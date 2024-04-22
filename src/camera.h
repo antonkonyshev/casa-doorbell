@@ -1,3 +1,5 @@
+#pragma once
+
 #include "OV7670.h"
 #include "BMP.h"
 #include "pinout.h"

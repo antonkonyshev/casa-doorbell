@@ -18,7 +18,7 @@ void setupRouting() {
     server.on("/service", [](AsyncWebServerRequest* request) {
         digitalWrite(LED_PIN, HIGH);
         // The service endpoint response is a constant for the service, since it doesn't changes within time while the device is working
-        request->send(200, "application/json", "{\"service\":\"camera\",\"name\":\"Door\",\"id\":\"apartments-door-1\",\"sensors\":[\"picture\"]}");
+        request->send(200, "application/json", "{\"service\":\"door\",\"name\":\"Door\",\"id\":\"apartments-door-1\",\"sensors\":[\"picture\"]}");
         digitalWrite(LED_PIN, LOW);
     });
 
