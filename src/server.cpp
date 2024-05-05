@@ -1,8 +1,6 @@
-#include "network.h"
+#include "server.h"
 
-WiFiMulti wifiMulti;
 AsyncWebServer server(API_PORT);
-bool wifiApMode = false;
 
 void setupRouting() {
     server.on("/", [](AsyncWebServerRequest* request) {
@@ -24,7 +22,7 @@ void setupRouting() {
     server.on("/service", [](AsyncWebServerRequest* request) {
         digitalWrite(LED_PIN, HIGH);
         // The service endpoint response is a constant for the service, since it doesn't changes within time while the device is working
-        request->send(200, "application/json", "{\"service\":\"door\",\"name\":\"Door\",\"id\":\"apartments-door-1\",\"sensors\":[\"picture\",\"presence\"]}");
+        request->send(200, "application/json", "{\"service\":\"door\",\"name\":\"Door\",\"id\":\"" + String(DEVICE_ID) + "\",\"sensors\":[\"picture\",\"presence\"]}");
         digitalWrite(LED_PIN, LOW);
     });
 
@@ -66,69 +64,4 @@ void setupRouting() {
     });
 
     server.begin();
-}
-
-void indicateSOS() {
-    delay(1000);
-    digitalWrite(LED_PIN, LOW);
-    for (uint8_t idx = 0; idx < 3; idx++) {
-        digitalWrite(LED_PIN, HIGH);
-        delay(200);
-        digitalWrite(LED_PIN, LOW);
-        delay(200);
-    }
-    delay(600);
-    for (uint8_t idx = 0; idx < 3; idx++) {
-        digitalWrite(LED_PIN, HIGH);
-        delay(600);
-        digitalWrite(LED_PIN, LOW);
-        delay(600);
-    }
-    delay(600);
-    for (uint8_t idx = 0; idx < 3; idx++) {
-        digitalWrite(LED_PIN, HIGH);
-        delay(200);
-        digitalWrite(LED_PIN, LOW);
-        delay(200);
-    }
-    delay(1000);
-}
-
-void wifiKeepAlive() {
-    if (wifiApMode) {
-        indicateSOS();
-        return;
-    }
-    uint8_t ledState = LOW;
-    uint8_t retries = 0;
-    while (wifiMulti.run(WIFI_CONNECTION_TIMEOUT * 1000) != WL_CONNECTED) {
-        ledState = ledState == LOW ? HIGH : LOW;
-        digitalWrite(LED_PIN, ledState);
-        delay(1000);
-        retries += 1;
-        if (retries > WIFI_STA_CONNECT_RETRIES) {
-            break;
-        }
-    }
-    if (retries > WIFI_STA_CONNECT_RETRIES) {
-        WiFi.mode(WIFI_MODE_AP);
-        WiFi.softAP("home_esp_country_house_room_1");
-        ESP_LOGI("home", "Couldn't connect to any available WiFi network. Fallback to access point mode with ssid 'home_esp_.*'. Please, connect to configure the device. After the configuration a reboot will be necessary.");
-        wifiApMode = true;
-        indicateSOS();
-    }
-    digitalWrite(LED_PIN, LOW);
-}
-
-bool setupWifi() {
-    WiFi.mode(WIFI_MODE_STA);
-    wifi_credentials_t* credentials = loadWiFiCredentials();
-    while (credentials) {
-        wifiMulti.addAP(credentials->ssid.c_str(), credentials->password.c_str());
-        credentials = credentials->next;
-    }
-    cleanWiFiCredentials();
-    wifiKeepAlive();
-    digitalWrite(LED_PIN, HIGH);
-    return true;
 }

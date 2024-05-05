@@ -1,5 +1,8 @@
 #pragma once
 
+#define DEVICE_ID "door-camera-1"
+#define DEVICE_NAME "Camera"
+
 #define LED_PIN 2
 
 #define CAMERA_SIOD 21

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <Arduino.h>
-
 #include "pinout.h"
 #include "journal.h"
 

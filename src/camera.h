@@ -1,7 +1,8 @@
 #pragma once
 
-#include "OV7670.h"
-#include "BMP.h"
+#include "OV7670/OV7670.h"
+#include "OV7670/BMP.h"
+
 #include "pinout.h"
 
 bool setupCamera();
