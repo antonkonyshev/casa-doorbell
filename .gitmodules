@@ -1,0 +1,3 @@
+[submodule "src/CasaLib"]
+	path = src/CasaLib
+	url = git@github.com:antonkonyshev/casa-lib.git
