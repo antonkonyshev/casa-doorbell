@@ -19,7 +19,7 @@ void onMotionDetected() {
     last_motion_detected = millis();
     is_indicating = true;
     digitalWrite(LED_PIN, HIGH);
-    saveJournalRecord("PIR sensor detected presence", 1);
+    appendJournalRecord("PIR sensor detected presence", millis(), 1, getPreferences()->journal_length);
 }
 
 void onMotionStopped() {
