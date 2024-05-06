@@ -39,6 +39,9 @@ void saveSettings(preferences_t* prefs) {
     #ifdef ESP8266_DEVICE
 
     savePreference(prefs);
+    if (prefs->wifi_ssid) {
+        saveWifiCredentials(prefs->wifi_ssid, prefs->wifi_password);
+    }
 
     #endif
 }
