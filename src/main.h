@@ -5,7 +5,6 @@
 #include "CasaLib/logging.h"
 #include "CasaLib/network.h"
 
-#include "journal.h"
 #include "sensors.h"
 #include "camera.h"
 #include "display.h"

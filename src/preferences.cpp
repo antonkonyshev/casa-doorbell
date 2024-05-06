@@ -46,6 +46,35 @@ void saveSettings(preferences_t* prefs) {
     #endif
 }
 
+void saveSettings(AsyncWebServerRequest* request) {
+    size_t params = request->params();
+    for (size_t idx = 0; idx < params; idx++) {
+        AsyncWebParameter* param = request->getParam(idx);
+
+        if (param->name() == NVS_ENABLE_DISPLAY) {
+            preferences->enable_display = param->value().toInt();
+        } else if (param->name() == NVS_DISPLAY_REFRESH_PERIOD) {
+            preferences->display_refresh_period = param->value().toInt();
+        } else if (param->name() == NVS_ENABLE_PRESENCE_DETECTION) {
+            preferences->enable_presence_detection = param->value().toInt();
+        } else if (param->name() == NVS_JOURNAL_LENGTH) {
+            preferences->journal_length = param->value().toInt();
+        } else if (param->name() == NVS_WIFI_SSID_CREDENTIALS_KEY) {
+            preferences->wifi_ssid = param->value().c_str();
+        } else if (param->name() == NVS_WIFI_PASSWORD_CREDENTIALS_KEY) {
+            preferences->wifi_password = param->value().c_str();
+        }
+    }
+    saveSettings(preferences);
+}
+
+void serializeSettings(char* buffer) {
+    sprintf(buffer,
+        "{\"enable_display\":%d,\"display_refresh_period\":%d,\"enable_presence_detection\":%d,\"journal_length\":%d}",
+        preferences->enable_display, preferences->display_refresh_period, preferences->enable_presence_detection,
+        preferences->journal_length);
+}
+
 preferences_t* getPreferences() {
     return preferences;
 }
