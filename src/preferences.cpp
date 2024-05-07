@@ -16,7 +16,9 @@ void setupPreferences() {
     #endif
     #ifdef ESP8266_DEVICE
 
-    loadPreference(preferences);
+    if (!loadPreference(preferences)) {
+        preferences->journal_length = NVS_JOURNAL_LENGTH_DEFAULT;
+    }
 
     #endif
 }
