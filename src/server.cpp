@@ -2,6 +2,10 @@
 
 AsyncWebServer server(API_PORT);
 
+void serviceInfoResponsePayload(char* buffer) {
+    sprintf(buffer, "{\"service\":\"door\",\"name\":\"Door\",\"id\":\"%s\",\"sensors\":[\"picture\",\"presence\"]}", DEVICE_ID);
+}
+
 void setupRouting() {
     server.on("/", [](AsyncWebServerRequest* request) {
         digitalWrite(LED_PIN, HIGH);
@@ -13,33 +17,10 @@ void setupRouting() {
         digitalWrite(LED_PIN, LOW);
     });
 
-    server.on("/journal", [](AsyncWebServerRequest* request) {
-        digitalWrite(LED_PIN, HIGH);
-
-        digitalWrite(LED_PIN, LOW);
-    });
-
-    server.on("/service", [](AsyncWebServerRequest* request) {
-        digitalWrite(LED_PIN, HIGH);
-        // The service endpoint response is a constant for the service, since it doesn't changes within time while the device is working
-        request->send(200, "application/json", "{\"service\":\"door\",\"name\":\"Door\",\"id\":\"" + String(DEVICE_ID) + "\",\"sensors\":[\"picture\",\"presence\"]}");
-        digitalWrite(LED_PIN, LOW);
-    });
-
-    server.on("/settings", HTTP_POST, [](AsyncWebServerRequest* request) {
-        digitalWrite(LED_PIN, HIGH);
-        saveSettings(request);
-        request->send(200);
-        digitalWrite(LED_PIN, LOW);
-    });
-
-    server.on("/settings", [](AsyncWebServerRequest* request) {
-        digitalWrite(LED_PIN, HIGH);
-        char payload[512] = {0};
-        serializeSettings(payload);
-        request->send(200, "application/json", payload);
-        digitalWrite(LED_PIN, LOW);
-    });
+    server.on("/journal", handleJournalRequest);
+    server.on("/service", handleServiceInfoRequest);
+    server.on("/settings", HTTP_POST, handleSettingsEditRequest);
+    server.on("/settings", handleSettingsReadRequest);
 
     server.begin();
 }
